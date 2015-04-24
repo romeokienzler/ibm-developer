@@ -1,17 +1,21 @@
+df1429616120827 <- idaQuery("select * from DASH100527.SENSOR_DATA",as.is=F) 
+#df1429616120827 <- as.data.frame(ida.data.frame('"DASH100527"."SENSOR_DATA"')[ ,c(DEVICEID,TIMESTAMP,VALUE)])
+#df1429626163374 <- as.data.frame(ida.data.frame('"DASH100527"."ALERT"')[ ,c(SENSOR,TIMESTAMP)])
+#df1429616120827$TIMESTAMP
 timestamp=as.numeric(df1429616120827$TIMESTAMP)
-
+#timestamp
 maxTimestamp=max(timestamp)
 cutOffTimestamp=maxTimestamp - 600
 idx = which(df1429616120827$TIMESTAMP>cutOffTimestamp)
-idx
+#idx
 workingSubset=df1429616120827[idx,]
-workingSubset
+#workingSubset
 values=as.numeric(workingSubset$VALUE)
 globalMean=mean(values)
 globalSD=sd(values)
 
 devideIds=unique(workingSubset$DEVICEID)
-devideIds
+#devideIds
 scores = 1:length(devideIds)
 for (i in 1:length(devideIds)) {
     idx = which(workingSubset$DEVICEID==devideIds[i])
@@ -46,6 +50,7 @@ devideIdOutlier
 #idaSave(mycon, dfrm=df1429626163374)
 #idadf(mycon,'insert into DASH100527.ALERT values ("test",0)')
 idadf(mycon,paste('update DASH100527.ALERT set SENSOR=',devideIdOutlier))
+#idadf(mycon,paste('update DASH100527.ALERT set SENSOR=','18'))
 
 
 #plot(df$TIMESTAMP,df$VALUE)
