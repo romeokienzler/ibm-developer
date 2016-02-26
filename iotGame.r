@@ -46,5 +46,5 @@ devideIdOutlier
 #dfalert <- as.data.frame(ida.data.frame('"DASH110683"."alert"')[ ,c('sensor')])
 #dfalert
 #idaUpdate(mycon, dfrm=dfalert)
-idadf(mycon,paste('update DASH105608.alert set sensor=\'',devideIdOutlier,'\''))
+#idadf(mycon,paste('update DASH105608.alert set sensor=\'',devideIdOutlier,'\''))
 
