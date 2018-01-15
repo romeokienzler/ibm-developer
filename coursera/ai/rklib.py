@@ -1,8 +1,6 @@
 import requests, json
 
-def submit(submitterEmail,secret,key,part):
-        with open('model.h5.base64', 'r') as myfile:
-            data=myfile.read()
+def submit(submitterEmail,secret,key,part, data):
         submission = {
                     "assignmentKey": key,
                     "submitterEmail":  submitterEmail,
