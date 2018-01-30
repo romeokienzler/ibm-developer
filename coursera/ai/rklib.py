@@ -28,8 +28,11 @@ def submitAll(submitterEmail,secret,key,parts_and_data):
                     "secret":  secret,
                     "parts": {}
                   }
-        for part in parts_and_data:
-            submission["parts"][part] = {"output": parts_and_data[part]}
+        for part, output in parts_and_data:
+            if output is not None:
+                submission["parts"][part] = {"output": output}
+            else:
+                submission["parts"][part] = dict()
         response = requests.post('https://www.coursera.org/api/onDemandProgrammingScriptSubmissions.v1', data=json.dumps(submission))
         if response.status_code == 201:
             print ("Submission successful, please check on the coursera grader page for the status")
