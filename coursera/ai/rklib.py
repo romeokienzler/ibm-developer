@@ -28,7 +28,7 @@ def submitAll(submitterEmail,secret,key,parts_and_data):
                     "secret":  secret,
                     "parts": {}
                   }
-        for part, output in parts_and_data:
+        for part, output in parts_and_data.items():
             if output is not None:
                 submission["parts"][part] = {"output": output}
             else:
