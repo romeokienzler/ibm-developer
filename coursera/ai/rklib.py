@@ -39,6 +39,9 @@ def submitAll(submitterEmail,secret,key,parts_and_data):
         response = requests.post('https://www.coursera.org/api/onDemandProgrammingScriptSubmissions.v1', data=json.dumps(submission))
         if response.status_code == 201:
             print ("Submission successful, please check on the coursera grader page for the status")
+            print ("-------------------------")
+            print (response.text)
+            print ("-------------------------")
         else:
             print ("Something went wrong, please have a look at the reponse of the grader")
             print ("-------------------------")
