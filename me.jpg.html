@@ -1,0 +1,44 @@
+<html>
+    
+     <script lang="JavaScript" src="openpgp.js"></script>
+     <script lang="JavaScript">
+
+        var oReq = new XMLHttpRequest();
+        oReq.open("GET", "https://github.com/romeokienzler/developerWorks/raw/master/me.jpg.gpg", true);
+        oReq.responseType = "arraybuffer";
+        var arrayBuffer = oReq.response;
+        
+        alert(1)
+        if (arrayBuffer) {
+            var byteArray = new Uint8Array(arrayBuffer);
+            for (var i = 0; i < byteArray.byteLength; i++) {
+                alert(byteArray[i])
+            }
+        }
+
+
+        oReq.send(null);
+
+
+        const options = {
+            message : window.openpgp.message.fromText('Hello, World!'),     
+            passwords : ['pw'],
+            armor : false
+        }
+
+        window.openpgp.encrypt(options).then(ciphertext => {
+            encrypted = ciphertext.message 
+            return encrypted
+        }).then(encrypted => {
+            const options = {
+                message : encrypted,   
+                passwords : ['pw']                               
+            }
+            window.openpgp.decrypt(options).then(plaintext => {
+                console.log(plaintext.data)
+                alert(plaintext.data)
+                return plaintext.data 
+            })
+        })       
+    </script>
+</html>
