@@ -7,6 +7,32 @@
         "info": ""
     },
     {
+        "id": "195f65421d563022",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
         "id": "a38db3d1e77f3735",
         "type": "inject",
         "z": "f6f2187d.f17ca8",
@@ -17,8 +43,8 @@
         "topic": "",
         "payload": "{ \"d\": {\"count\":0, \"hardness\": 61, \"temperature\": 50, \"flowrate\": 11, \"fluidlevel\": \"acceptable\" } }",
         "payloadType": "json",
-        "x": 380,
-        "y": 200,
+        "x": 420,
+        "y": 240,
         "wires": [
             [
                 "86d0cd4dbe2b133e"
@@ -36,8 +62,8 @@
         "topic": "",
         "payload": "{ \"d\": { \"voltage\": 240, \"frequency\": 50 } }",
         "payloadType": "json",
-        "x": 359.66668701171875,
-        "y": 275.1000061035156,
+        "x": 399.66668701171875,
+        "y": 315.1000061035156,
         "wires": [
             [
                 "037488669499eb64"
@@ -55,8 +81,8 @@
         "topic": "",
         "payload": "{ \"d\": { \"speed\": 1200 } }",
         "payloadType": "json",
-        "x": 367.66668701171875,
-        "y": 359.1000061035156,
+        "x": 407.66668701171875,
+        "y": 399.1000061035156,
         "wires": [
             [
                 "b3da99b1af9fa855"
@@ -71,8 +97,8 @@
         "func": "// initialise the counter to 0 if it doesn't exist already\nvar count = context.get('count')||0;\nvar hardness = context.get('hardness')||0;\nvar randomness = context.get('randomness')||0;\ncount += 1;\n// store the value back\ncontext.set('count',count);\n// make it part of the outgoing msg object\nmsg.payload.d.count = count;\nif(count % 300 == 0) {\n    context.set('randomness',1);\n    context.set('hardness', 83);\n} else if(count % 20 == 0) {\n    context.set('randomness',0);\n} else if(count % 121 == 0) {\n    context.set('randomness',2);\n    context.set('hardness', 100);\n}\n\nif(randomness == 0) {\n    // no variation\n    msg.payload.d.hardness = Math.floor(Math.random() * (80 - 70 + 1) + 70);\n} else if(randomness == 1) {\n    // gradually increase\n    msg.payload.d.hardness = hardness + 1;\n    context.set('hardness', (hardness + 1));\n} else {\n    msg.payload.d.hardness = hardness + 5;\n    context.set('hardness', (hardness + 5));\n}\nmsg.payload.d.temperature = Math.floor(Math.random() * (100 - 80 + 1) + 80);\n\n//msg.payload = JSON.stringify(msg.payload)\nmsg.eventOrCommandType = \"fluid\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 601.5500183105469,
-        "y": 199.48333740234375,
+        "x": 641.5500183105469,
+        "y": 239.48333740234375,
         "wires": [
             [
                 "4354533fa7063ad2"
@@ -87,8 +113,8 @@
         "func": "// initialise the counter to 0 if it doesn't exist already\nvar count = context.get('count')||0;\ncount += 1;\n// store the value back\ncontext.set('count',count);\n// make it part of the outgoing msg object\nmsg.payload.d.count = count;\nif(count % 100 <= 90) {\n    msg.payload.d.voltage = Math.floor(Math.random() * (240 - 220) + 220);\n} else {\n    msg.payload.d.voltage = Math.floor(Math.random() * (260 - 240) + 240);\n}\nmsg.payload.d.frequency = Math.floor(Math.random() * (80 - 60 + 1) + 60);\n//msg.payload = JSON.stringify(msg.payload)\nmsg.eventOrCommandType = \"voltage\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 578.550048828125,
-        "y": 250.98333740234375,
+        "x": 618.550048828125,
+        "y": 290.98333740234375,
         "wires": [
             [
                 "4354533fa7063ad2"
@@ -103,8 +129,8 @@
         "func": "// initialise the counter to 0 if it doesn't exist already\nvar count = context.get('count')||0;\ncount += 1;\n// store the value back\ncontext.set('count',count);\n// make it part of the outgoing msg object\nmsg.payload.d.count = count;\nif(count % 100 <= 90) {\n    // No variation - within the safe limit\n    msg.payload.d.speed = Math.floor(Math.random() * (1100 - 1000) + 1000);    \n} else {\n    msg.payload.d.speed = Math.floor(Math.random() * (1300 - 1150) + 1150);        \n}\n\n\n//msg.payload = JSON.stringify(msg.payload)\nmsg.eventOrCommandType = \"drum\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 610.5500183105469,
-        "y": 358.98333740234375,
+        "x": 650.5500183105469,
+        "y": 398.98333740234375,
         "wires": [
             [
                 "4354533fa7063ad2"
@@ -119,11 +145,11 @@
         "func": "msg.payload.d.ts = new Date().getTime();\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 786.5,
-        "y": 275.23333740234375,
+        "x": 826.5,
+        "y": 315.23333740234375,
         "wires": [
             [
-                "bd622cbf49c93f0b"
+                "e1a7873c50b824e8"
             ]
         ]
     },
@@ -132,11 +158,50 @@
         "type": "debug",
         "z": "f6f2187d.f17ca8",
         "name": "",
-        "active": false,
+        "active": true,
         "console": "false",
         "complete": "payload",
-        "x": 870.5,
-        "y": 353.98333740234375,
+        "x": 910.5,
+        "y": 393.98333740234375,
+        "wires": []
+    },
+    {
+        "id": "b0b095254d39b944",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "random_topic",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "195f65421d563022",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 560,
+        "wires": [
+            [
+                "bd622cbf49c93f0b"
+            ]
+        ]
+    },
+    {
+        "id": "e1a7873c50b824e8",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "random_topic",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "195f65421d563022",
+        "x": 1130,
+        "y": 320,
         "wires": []
     }
 ]
