@@ -1,0 +1,267 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "784402ce76933736",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "d5b9913.711ce7",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "repeat": "0.01",
+        "crontab": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 290,
+        "y": 220,
+        "wires": [
+            [
+                "1aa7a47d.5c129c"
+            ]
+        ]
+    },
+    {
+        "id": "1aa7a47d.5c129c",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "func": "var h = context.global.get('h')||0.008;\nvar a = context.global.get('a')||10;\nvar b = context.global.get('b')||28;\nvar c = context.global.get('c')||8/3;\nvar x = context.global.get('x')||2;\nvar y = context.global.get('y')||3;\nvar z = context.global.get('z')||4;\n\n\nx+=h*a*(y-x)\ny+=h*(x*(b-z)-y)\nz+=h*(x*y-c*z)\n\n\ncontext.global.set(\"x\",x);\ncontext.global.set(\"y\",y);\ncontext.global.set(\"z\",z);\nmsg.payload={};\nmsg.payload.x=x;\nmsg.payload.y=y;\nmsg.payload.z=z;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 482,
+        "y": 226.5,
+        "wires": [
+            [
+                "98c99198.87fa2",
+                "d14575b2.00c94"
+            ]
+        ]
+    },
+    {
+        "id": "98c99198.87fa2",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 656,
+        "y": 215.25,
+        "wires": []
+    },
+    {
+        "id": "3944ab9c.e5fdac",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 743,
+        "y": 451.25,
+        "wires": []
+    },
+    {
+        "id": "955dad4a.a8d0f8",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "healthy",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 230,
+        "y": 294,
+        "wires": [
+            [
+                "10e783c4.ad7014"
+            ]
+        ]
+    },
+    {
+        "id": "7e39a96.4739858",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "broken",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 232,
+        "y": 351,
+        "wires": [
+            [
+                "3d7f4f45.db9e"
+            ]
+        ]
+    },
+    {
+        "id": "10e783c4.ad7014",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "func": "context.global.set('h',0.008);\ncontext.global.set('a',10);\ncontext.global.set('b',28);\ncontext.global.set('c',8/3);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 363,
+        "y": 291.5,
+        "wires": [
+            [
+                "1b9b2cc3.b978db"
+            ]
+        ]
+    },
+    {
+        "id": "3d7f4f45.db9e",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "func": "context.global.set('h',0.008);\ncontext.global.set('a',30);\ncontext.global.set('b',128);\ncontext.global.set('c',28/3);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 322,
+        "y": 405.5,
+        "wires": [
+            [
+                "1b9b2cc3.b978db"
+            ]
+        ]
+    },
+    {
+        "id": "d14575b2.00c94",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "limit to max 3000 ",
+        "func": "var count = context.global.get('count') || 0;\ncount += 1;\ncontext.global.set('count',count);\nif (count <= 3000) {\n   return msg; \n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 721,
+        "y": 286,
+        "wires": [
+            [
+                "082d55ea53696193"
+            ]
+        ]
+    },
+    {
+        "id": "f2506e37.b54eb",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "func": "context.global.set('count',0);\nmsg.payload=context.global.get('count');\ncontext.global.set(\"x\",2);\ncontext.global.set(\"y\",3);\ncontext.global.set(\"z\",4);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 319,
+        "y": 682,
+        "wires": [
+            [
+                "1b9b2cc3.b978db"
+            ]
+        ]
+    },
+    {
+        "id": "6a522907.bf8198",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "reset",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 218,
+        "y": 567.5,
+        "wires": [
+            [
+                "f2506e37.b54eb"
+            ]
+        ]
+    },
+    {
+        "id": "1b9b2cc3.b978db",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 468.5,
+        "y": 673.5,
+        "wires": []
+    },
+    {
+        "id": "c359a3684052c807",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "lorenz_sensor",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "784402ce76933736",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 580,
+        "y": 460,
+        "wires": [
+            [
+                "3944ab9c.e5fdac"
+            ]
+        ]
+    },
+    {
+        "id": "082d55ea53696193",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "lorenz_sensor",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "784402ce76933736",
+        "x": 950,
+        "y": 300,
+        "wires": []
+    }
+]
